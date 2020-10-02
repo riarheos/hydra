@@ -14,10 +14,10 @@ function init () {
   window.P5 = P5
 
   var canvas = document.getElementById('hydra-canvas')
-  canvas.width = window.innerWidth * window.devicePixelRatio
-  canvas.height = window.innerHeight * window.devicePixelRatio
-  canvas.style.width = '100%'
-  canvas.style.height = '100%'
+  canvas.width = 1920
+  canvas.height = 1080
+  canvas.style.width = '1920'
+  canvas.style.height = '1080'
   canvas.style.imageRendering = 'pixelated'
 
   let isIOS =
@@ -28,7 +28,13 @@ function init () {
   let precisionValue = isIOS ? 'highp' : 'mediump'
 
   var pb = new PatchBay()
-  var hydra = new HydraSynth({ pb: pb, canvas: canvas, autoLoop: false,  precision: precisionValue})
+  var hydra = new HydraSynth({
+    pb: pb,
+    canvas: canvas,
+    autoLoop: false,
+    precision: precisionValue,
+  })
+  hydra.setResolution(1920, 1080);
   var editor = new Editor()
   var menu = new Menu({ editor: editor, hydra: hydra})
   log.init()
@@ -56,6 +62,8 @@ function init () {
   })
 
   // define extra functions (eventually should be added to hydra-synth?)
+  const stream = canvas.captureStream();
+  window.recorder = RecordRTC(stream, {type: "video"});
 
   // hush clears what you see on the screen
   window.hush = () => {
